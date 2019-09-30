@@ -1,12 +1,28 @@
 {
     "compilerOptions": {
-      "module": "commonjs",
-      "esModuleInterop": true,
-      "target": "es6",
-      "moduleResolution": "node",
-      "sourceMap": true,
-      "outDir": "dist"
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": "./",
+        "typeRoots": [
+            "node_modules/@types",
+            "node_modules/@types/node"
+        ],
+        "types": [
+            "node",
+        ],
     },
-    "exclude": ["/node_modules/"],
-    "lib": ["es2015"],
+    "exclude": [
+        "dist",
+        "/node_modules/"
+    ],
+    "lib": [
+        "es2015"
+    ],
+    "filesGlob": [
+        "./node_modules/@types/**/*.d.ts",
+    ],
 }
