@@ -3,21 +3,25 @@
         "module": "commonjs",
         "esModuleInterop": true,
         "target": "es6",
+        "lib": ["es2017"],
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
         "baseUrl": "./",
         "typeRoots": [
             "node_modules/@types",
+            "node_modules/@types/jest",
             "node_modules/@types/node"
         ],
         "types": [
+            "jest",
             "node",
         ],
     },
     "exclude": [
         "dist",
-        "/node_modules/"
+        "node_modules",
+        "**/*.spec.ts"
     ],
     "lib": [
         "es2015"
