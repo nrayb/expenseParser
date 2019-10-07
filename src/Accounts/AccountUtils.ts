@@ -45,6 +45,7 @@ const RBC_ACCOUNT_MAPPING: { [key: string]: string } = {
 };
 
 export function sanitizeAccountDescription(account: string): string {
+    // This logic can be expensive, so this would be a good candidate for memoization
     return account.replace(/\s?\(?\d{3}\)?(?:-|\*|\s)?\d{3}(?:-|\*|\s)\d{4}/, "") // Removes phone numbers
         .split(/\s?(?<!\S)(?:AB|BC|ON|QC|CA)(?!\S)/i).join("") // Replaces all instances of Provinces
         .split(/\s?(?:BURNABY|COQUITLAM|SURREY|VANCOUVER|RICHMOND|TORONTO|VERDUN|MISSISSAUGA)/i).join("")
