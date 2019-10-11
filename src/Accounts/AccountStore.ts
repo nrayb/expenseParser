@@ -3,73 +3,106 @@ import {
     IAccountPayload
 } from "./Account";
 
-// Hm.... I don't think I like having the accountName as well as the materializedPath.
-// The materializedPath should be enough, and we should use this as the uniqueId
-const ACCOUNT_PAYLOADS: IAccountPayload[] = [
-    { accountName: "TransitPass", materializedPath: "Expenses:Transport:TransitPass" },
-    { accountName: "Electricity", materializedPath: "Expenses:Home:Electricity" },
-    { accountName: "Mortgage", materializedPath: "Expenses:Home:Mortgage" },
-    { accountName: "Strata", materializedPath: "Expenses:Home:Strata" },
-    { accountName: "PropertyTax", materializedPath: "Expenses:Home:PropertyTax" },
-    { accountName: "Insurance", materializedPath: "Expenses:Home:Insurance" },
-    { accountName: "Groceries", materializedPath: "Expenses:Home:Groceries" },
-    { accountName: "Phone-Mine", materializedPath: "Expenses:Home:Phone:Mine" }, // TODO: change the accountName
-    { accountName: "Phone-Mom", materializedPath: "Expenses:Home:Phone:Mom" }, // TODO: change the accountName
-    { accountName: "Furniture", materializedPath: "Expenses:Home:Furniture" },
-    { accountName: "Insurance", materializedPath: "Expenses:Car:Insurance" },
-    { accountName: "Gas", materializedPath: "Expenses:Car:Gas" },
-    { accountName: "Maintenance", materializedPath: "Expenses:Car:Maintenance" },
-    { accountName: "Breakfast", materializedPath: "Expenses:Food:Breakfast" },
-    { accountName: "Brunch", materializedPath: "Expenses:Food:Brunch" },
-    { accountName: "Lunch", materializedPath: "Expenses:Food:Lunch" },
-    { accountName: "Dinner", materializedPath: "Expenses:Food:Dinner" },
-    { accountName: "Snacks", materializedPath: "Expenses:Food:Snacks" },
-    { accountName: "Coffee", materializedPath: "Expenses:Food:Coffee" },
-    { accountName: "Shared-Account", materializedPath: "Expenses:Shared-Account" },
-    { accountName: "Date", materializedPath: "Expenses:Personal:Date" },
-    { accountName: "Toys", materializedPath: "Expenses:Personal:Toys" },
-    { accountName: "Tech", materializedPath: "Expenses:Personal:Tech" },
-    { accountName: "Camera", materializedPath: "Expenses:Personal:Camera" },
-    { accountName: "ShitHappens", materializedPath: "Expenses:Personal:ShitHappens" },
-    { accountName: "Clothes", materializedPath: "Expenses:Personal:Clothes" },
-    { accountName: "Taxes", materializedPath: "Expenses:Personal:Taxes" },
-    { accountName: "Material", materializedPath: "Expenses:Personal:Material" }, // TODO: change the accountName
-    { accountName: "Fun", materializedPath: "Expenses:Personal:Fun" }, // TODO: change the accountName
-    { accountName: "Necessary", materializedPath: "Expenses:Personal:Necessary" },
-    { accountName: "Flights", materializedPath: "Expenses:Personal:Travel:Flights" },
-    { accountName: "Transit", materializedPath: "Expenses:Personal:Travel:Transit" },
-    { accountName: "Wifi", materializedPath: "Expenses:Personal:Travel:Wifi" },
-    { accountName: "Toiletries", materializedPath: "Expenses:Personal:Travel:Toiletries" },
-    { accountName: "Accommodations", materializedPath: "Expenses:Personal:Travel:Accommodations" },
-    { accountName: "PocketMoney", materializedPath: "Expenses:Personal:Travel:PocketMoney" },
-    { accountName: "Etc", materializedPath: "Expenses:Gifts:Etc" },
-    { accountName: "Rochelle", materializedPath: "Expenses:Gifts:Rochelle" },
-    { accountName: "Camille", materializedPath: "Expenses:Gifts:Camille" },
-    { accountName: "Mom", materializedPath: "Expenses:Gifts:Mom" },
-    { accountName: "Dad", materializedPath: "Expenses:Gifts:Dad" },
-    { accountName: "Kokoy", materializedPath: "Expenses:Gifts:Kokoy" },
-    { accountName: "Jay", materializedPath: "Expenses:Gifts:Jay" },
-];
+const initializedAccounts: { [key: string]: Account } = {};
 
-const initializedAccounts: Account[] = [];
+// TODO: Implement this better and upload to whatever DB we're using
+export function createAccount(accountPayload: IAccountPayload): Account {
+    // Validate account payload
+    // Most of the other functions are pretty optimistic regarding the inputs.
+    // Make sure that when we use this function, only accept valid payloads
+    return initializeAccount(accountPayload);
+}
 
-// TODO: Implement this
-// These kind of makes sense to be done in a SQL table read
 export function getAllAccounts(): Account[] {
     // TODO: Implement query for account list.
     // This would be a good place to query for the accounts from whereever we keep them.
     // For now, we can keep them statically since this won't change much,
-    return [];
+    return Object.values(initializedAccounts);
 }
 
-// TODO: Implement this
-// These kind of makes sense to be done in a SQL table read
-export function getAccount(accountName: string): Account {
-    return undefined;
+export function getAccount(materializedPath: string): Account | undefined {
+    return initializedAccounts[materializedPath];
 }
 
 // TODO: Implement this
 // These kind of makes sense to be done in a SQL table read
 export function getAccountsWithParent(parentAccountName: string): Account[] {
     return [];
+}
+
+// Initializes the desired account and all uninitialized ancestors
+export function initializeAccount({ materializedPath }: IAccountPayload): Account {
+    if (!validatePath(materializedPath) || initializedAccounts[materializedPath]) { return; }
+
+    const account = new Account({ materializedPath });
+    initializedAccounts[materializedPath] = account;
+
+    const regexTest = /:(?:.(?!:))+$/m;
+    if (regexTest.test(materializedPath)) {
+        const parentPath = materializedPath.replace(regexTest, "");
+        const parent = initializedAccounts[parentPath] || initializeAccount({ materializedPath: parentPath });
+        account.parent = parent;
+        account.parent.children.push(account);
+    }
+
+    return account;
+}
+
+export function initializeAllAccounts() {
+    // TODO: Implement getter of where we store the accounts
+    // This is super ugly having the account list as part of the code.
+    const ACCOUNT_PAYLOADS: IAccountPayload[] = [
+        { materializedPath: "Expenses:Transport:TransitPass" },
+        { materializedPath: "Expenses:Home:Electricity" },
+        { materializedPath: "Expenses:Home:Mortgage" },
+        { materializedPath: "Expenses:Home:Strata" },
+        { materializedPath: "Expenses:Home:PropertyTax" },
+        { materializedPath: "Expenses:Home:Insurance" },
+        { materializedPath: "Expenses:Home:Groceries" },
+        { materializedPath: "Expenses:Home:Phone:Mine" }, // TODO: change the accountName
+        { materializedPath: "Expenses:Home:Phone:Mom" }, // TODO: change the accountName
+        { materializedPath: "Expenses:Home:Furniture" },
+        { materializedPath: "Expenses:Car:Insurance" },
+        { materializedPath: "Expenses:Car:Gas" },
+        { materializedPath: "Expenses:Car:Maintenance" },
+        { materializedPath: "Expenses:Food:Breakfast" },
+        { materializedPath: "Expenses:Food:Brunch" },
+        { materializedPath: "Expenses:Food:Lunch" },
+        { materializedPath: "Expenses:Food:Dinner" },
+        { materializedPath: "Expenses:Food:Snacks" },
+        { materializedPath: "Expenses:Food:Coffee" },
+        { materializedPath: "Expenses:Shared-Account" },
+        { materializedPath: "Expenses:Personal:Date" },
+        { materializedPath: "Expenses:Personal:Toys" },
+        { materializedPath: "Expenses:Personal:Tech" },
+        { materializedPath: "Expenses:Personal:Camera" },
+        { materializedPath: "Expenses:Personal:ShitHappens" },
+        { materializedPath: "Expenses:Personal:Clothes" },
+        { materializedPath: "Expenses:Personal:Taxes" },
+        { materializedPath: "Expenses:Personal:Material" }, // TODO: change the accountName
+        { materializedPath: "Expenses:Personal:Fun" }, // TODO: change the accountName
+        { materializedPath: "Expenses:Personal:Necessary" },
+        { materializedPath: "Expenses:Personal:Travel:Flights" },
+        { materializedPath: "Expenses:Personal:Travel:Transit" },
+        { materializedPath: "Expenses:Personal:Travel:Wifi" },
+        { materializedPath: "Expenses:Personal:Travel:Toiletries" },
+        { materializedPath: "Expenses:Personal:Travel:Accommodations" },
+        { materializedPath: "Expenses:Personal:Travel:PocketMoney" },
+        { materializedPath: "Expenses:Gifts:Etc" },
+        { materializedPath: "Expenses:Gifts:Rochelle" },
+        { materializedPath: "Expenses:Gifts:Camille" },
+        { materializedPath: "Expenses:Gifts:Mom" },
+        { materializedPath: "Expenses:Gifts:Dad" },
+        { materializedPath: "Expenses:Gifts:Kokoy" },
+        { materializedPath: "Expenses:Gifts:Jay" },
+    ];
+
+    ACCOUNT_PAYLOADS.forEach(initializeAccount);
+}
+
+function validatePath(materializedPath: string): boolean {
+    return !!materializedPath &&
+        materializedPath[0] !== ":" &&
+        materializedPath[materializedPath.length - 1] !== ":" &&
+        !/[^\w:-]/.test(materializedPath); // Only allow letters, numbers, ":", and "-"
 }
