@@ -1,12 +1,12 @@
-import { getAccount } from "./AccountStore";
+import { getAccountName } from "./AccountUtils";
 
 // This interface is likely going to be exactly how we store it in the DB.
 // I've chosen to follow the "Materialized Path" pattern to store the hierarchy
 // https://docs.mongodb.com/manual/tutorial/model-tree-structures-with-materialized-paths/
 export interface IAccountPayload {
-    accountName: string;
     children?: Account[];
     currency?: string;
+    isOpen?: boolean;
     materializedPath: string;
 }
 
@@ -17,15 +17,9 @@ export class Account {
     private currency: string = "CAD";
     private materializedPath: string;
 
-    constructor({ accountName, materializedPath }: IAccountPayload) {
-        this.accountName = accountName;
+    constructor({ materializedPath }: IAccountPayload) {
         this.materializedPath = materializedPath;
-        const splitPath = materializedPath.split(":");
-        const parentAccountName = splitPath[splitPath.length - 2]; // I don't like this too much... not very fool-proof
-        if (parentAccountName) {
-            this.parent = getAccount(parentAccountName);
-            this.parent.children.push(this);
-        }
+        this.accountName = getAccountName(materializedPath);
     }
 
     public toBeanCountString(): string {

@@ -44,6 +44,11 @@ const RBC_ACCOUNT_MAPPING: { [key: string]: string } = {
     "YAH-YAH-YA": "YAH-YAH-YA",
 };
 
+export function getAccountName(materializedPath: string): string {
+    const splitPath = materializedPath.split(":");
+    return splitPath[splitPath.length - 1] || "";
+}
+
 export function sanitizeAccountDescription(account: string): string {
     // This logic can be expensive, so this would be a good candidate for memoization
     return account.replace(/\s?\(?\d{3}\)?(?:-|\*|\s)?\d{3}(?:-|\*|\s)\d{4}/, "") // Removes phone numbers
