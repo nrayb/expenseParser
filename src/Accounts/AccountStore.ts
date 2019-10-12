@@ -3,9 +3,12 @@ import {
     IAccountPayload
 } from "./Account";
 
+import { validatePath } from "./AccountUtils";
+
 const initializedAccounts: { [key: string]: Account } = {};
 
 // TODO: Implement this better and upload to whatever DB we're using
+// This is not necessary for this project since this will only read and output transactions
 export function createAccount(accountPayload: IAccountPayload): Account {
     // Validate account payload
     // Most of the other functions are pretty optimistic regarding the inputs.
@@ -98,11 +101,4 @@ export function initializeAllAccounts() {
     ];
 
     ACCOUNT_PAYLOADS.forEach(initializeAccount);
-}
-
-function validatePath(materializedPath: string): boolean {
-    return !!materializedPath &&
-        materializedPath[0] !== ":" &&
-        materializedPath[materializedPath.length - 1] !== ":" &&
-        !/[^\w:-]/.test(materializedPath); // Only allow letters, numbers, ":", and "-"
 }
