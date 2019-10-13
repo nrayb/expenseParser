@@ -9,7 +9,7 @@ const initializedAccounts: { [key: string]: Account } = {};
 
 // TODO: Implement this better and upload to whatever DB we're using
 // This is not necessary for this project since this will only read and output transactions
-export function createAccount(accountPayload: IAccountPayload): Account {
+export function createAccount(accountPayload: IAccountPayload): Account | undefined{
     // Validate account payload
     // Most of the other functions are pretty optimistic regarding the inputs.
     // Make sure that when we use this function, only accept valid payloads
@@ -24,6 +24,9 @@ export function getAllAccounts(): Account[] {
 }
 
 export function getAccount(materializedPath: string): Account | undefined {
+    // Not sure if I want this yet, but this makes sense for the parser...
+    // if (!initializedAccounts.length) { initializeAllAccounts(); }
+
     return initializedAccounts[materializedPath];
 }
 
@@ -34,8 +37,10 @@ export function getAccountsWithParent(parentAccountName: string): Account[] {
 }
 
 // Initializes the desired account and all uninitialized ancestors
-export function initializeAccount({ materializedPath }: IAccountPayload): Account {
-    if (!validatePath(materializedPath) || initializedAccounts[materializedPath]) { return; }
+export function initializeAccount({ materializedPath }: IAccountPayload): Account | undefined {
+    if (!validatePath(materializedPath)) { return; }
+
+    if (initializedAccounts[materializedPath]) { return initializedAccounts[materializedPath]; }
 
     const account = new Account({ materializedPath });
     initializedAccounts[materializedPath] = account;

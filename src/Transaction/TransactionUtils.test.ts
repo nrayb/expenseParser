@@ -1,6 +1,6 @@
 import {
     mapSanitizedAccountToAccountName,
-    sanitizeAccountDescription,
+    sanitizeAccountName,
 } from "./TransactionUtils";
 
 const testAssetMap: {[key: string]: string} = {
@@ -51,7 +51,7 @@ const testAssetMap: {[key: string]: string} = {
 
 test("Test sanitizeAccountDescription for all known raw account name from RBC", () => {
     (Object.keys(testAssetMap) as string[]).forEach((rawAccountName: string) => {
-        expect(sanitizeAccountDescription(rawAccountName)).toBe(testAssetMap[rawAccountName]);
+        expect(sanitizeAccountName(rawAccountName)).toBe(testAssetMap[rawAccountName]);
     });
 });
 

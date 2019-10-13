@@ -63,6 +63,7 @@ describe("test validatePath ", () => {
     });
 
     test("for all undesired paths", () => {
+        expect(validatePath("")).toBeFalsy();
         expect(validatePath("materiali!zedPath")).toBeFalsy();
         expect(validatePath("materializ#edPath")).toBeFalsy();
         expect(validatePath("materiali@zedPath")).toBeFalsy();

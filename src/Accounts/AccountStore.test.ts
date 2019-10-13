@@ -3,8 +3,15 @@ describe("AccountStore tests. ", () => {
         jest.resetModules();
     });
 
+    test("Test initializeAccount for duplicate accounts", () => {
+        const { getAllAccounts, initializeAccount } = require("./AccountStore");
+        expect(initializeAccount({ materializedPath: "TODO" })).toBeTruthy();
+        expect(initializeAccount({ materializedPath: "TODO" })).toBeTruthy();
+        expect(getAllAccounts().length).toBe(1);
+    });
+
     test("Test initializeAccount for invalid account path", () => {
-        const { getAccount, getAllAccounts, initializeAccount } = require("./AccountStore");
+        const { getAllAccounts, initializeAccount } = require("./AccountStore");
         expect(initializeAccount({ materializedPath: "" })).toBeFalsy();
         expect(initializeAccount({ materializedPath: "TOD!!O" })).toBeFalsy();
         expect(initializeAccount({ materializedPath: ":" })).toBeFalsy();
