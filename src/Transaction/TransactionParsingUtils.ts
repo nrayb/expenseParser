@@ -10,6 +10,9 @@ import {
 // Since we know the format comming in from RBC, it may be faster to just parse it through regex
 // For now though, we can simply trust that this method will work, and is universal enough for this.
 export function parseDate(date: string): Date {
+    // According to mdn, this should be avoided since it behaves differently in diff browsers
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+    // But I think it's fine since this will only run on node, so it should remain consistent
     return new Date(date);
 }
 
