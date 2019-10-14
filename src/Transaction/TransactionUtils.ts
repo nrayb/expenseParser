@@ -1,3 +1,6 @@
+// TODO: Move this file away from transactionUtils.
+//      - This is more of a parser util and will not live in the transaction component
+
 // TODO: This would be nice if we could expose this to the user.
 // This should be something that can be configured in the user side.
 // We should re-implement this to live somewhere else (i.e. S3, or maybe google drive)
@@ -60,4 +63,9 @@ export function sanitizeAccountName(account: string): string {
 //      - It doesn't make sense for the parsing library to host the mapping
 export function mapSanitizedAccountToAccountName(account: string): string | undefined {
     return RBC_ACCOUNT_MAPPING[account.toUpperCase()];
+}
+
+// TODO: Implement this
+export function inferAccountPath(accountName: string): string {
+    return "";
 }
