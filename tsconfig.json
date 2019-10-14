@@ -17,6 +17,7 @@
             "jest",
             "node",
         ],
+        "resolveJsonModule": true,
         "alwaysStrict": true,
         "strictNullChecks": true,
         "noImplicitAny": true,
