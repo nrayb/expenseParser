@@ -1,4 +1,5 @@
 import {
+    inferAccountPath,
     mapSanitizedAccountToAccountName,
     sanitizeAccountName,
 } from "./TransactionUtils";
@@ -59,5 +60,50 @@ test("Test mapSanitizedAccountToAccountName for all known parsed account name fr
     (Object.values(testAssetMap) as string[]).forEach((parsedAccountName: string) => {
         // We simply assume that the map will return a hit when passing in a known account name
         expect(mapSanitizedAccountToAccountName(parsedAccountName)).toBeTruthy();
+    });
+});
+
+test("Test inferAccountPath for all known, parsed transaction name from RBC", () => {
+    const accountPathMap: {[key: string]: string} = {
+        "7-ELEVEN": "Expenses:Home:Groceries",
+        "ADOBE": "Expenses:Personal:Fun",
+        "AMATO GELATO CAFE": "Expenses:Food:Snacks",
+        "AMAZON": "Expenses:Personal:Material",
+        "APPLE": "Expenses:Personal:Tech",
+        "AUDIBLE": "Expenses:Personal:Fun",
+        "BEST BUY": "Expenses:Personal:Tech",
+        "BISTRO SAKANA": "Expenses:Food:Lunch",
+        "BUBBLE WAFFLE": "Expenses:Food:Lunch",
+        "CANADIAN TIRE": "Expenses:Home:Groceries",
+        "CHATIME": "Expenses:Food:Snacks",
+        "CINEPLEX": "Expenses:Personal:Fun",
+        "COSTCO": "Expenses:Home:Groceries",
+        "CRAFT BEER MARKET": "Expenses:Food:Lunch",
+        "DELICIOUS PHO": "Expenses:Food:Lunch",
+        "FALAFEL KING": "Expenses:Food:Lunch",
+        "FIDO": "Expenses:Home:Phone:Mine",
+        "GUU GARDEN": "Expenses:Food:Lunch",
+        "IKEA": "Expenses:Home:Furniture",
+        "ITUNES": "Expenses:Personal:Necessary",
+        "LANDMARK": "Expenses:Personal:Fun",
+        "MAN CAVE": "Expenses:Personal:Necessary",
+        "MASTERCARD": "Liabilities:CA:RBC:MasterCard",
+        "MCDONALDS": "Expenses:Food:Breakfast",
+        "NEW SZECHUAN RESTAURANT": "Expenses:Food:Dinner",
+        "OPA": "Expenses:Food:Dinner",
+        "PETROCAN": "Expenses:Car:Gas",
+        "RBC MASTERCARD": "Assets:CA:RBC:Chequing",
+        "STARBUCKS": "Expenses:Food:Coffee",
+        "T&T": "Expenses:Home:Groceries",
+        "TACO TIME": "Expenses:Food:Lunch",
+        "TIM HORTONS": "Expenses:Food:Breakfast",
+        "TRANSLINK": "Expenses:Transport:TransitPass",
+        "VIRGIN MOBILE": "Expenses:Home:Phone:Mom",
+        "WALMART": "Expenses:Home:Groceries",
+        "WORK": "Expenses:Food:Snacks",
+        "YAH-YAH-YA": "Expenses:Food:Lunch",
+    };
+    Object.keys(accountPathMap).forEach((transactionName) => {
+        expect(inferAccountPath(transactionName)).toBe(accountPathMap[transactionName]);
     });
 });
