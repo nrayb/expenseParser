@@ -26,7 +26,7 @@ export function inferTransactionName(accountName: string): string {
 
 export function inferAccount(accountName: string): Account | undefined {
     const sanitizedAccount = sanitizeAccountName(accountName);
-    const accountPath = inferAccountPath(sanitizedAccount);
+    const accountPath = inferAccountPath(sanitizedAccount.toUpperCase());
     return getAccount(accountPath);
 }
 
