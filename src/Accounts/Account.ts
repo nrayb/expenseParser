@@ -11,10 +11,10 @@ export interface IAccountPayload {
 }
 
 export class Account {
+    public accountName: string;
     public children: Account[] = [];
+    public currency: string = "CAD";
     public parent: Account;
-    private accountName: string;
-    private currency: string = "CAD";
     private materializedPath: string;
 
     constructor({ materializedPath }: IAccountPayload) {
@@ -24,7 +24,5 @@ export class Account {
 
     public toBeanCountString(): string {
         return this.materializedPath;
-        // const prefix = this.parent ? this.parent.toBeanCountString() : this.type.toString();
-        // return `${prefix}${":"}${this.accountName.toUpperCase()}`;
     }
 }
