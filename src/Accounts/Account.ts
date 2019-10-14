@@ -15,14 +15,10 @@ export class Account {
     public children: Account[] = [];
     public currency: string = "CAD";
     public parent: Account;
-    private materializedPath: string;
+    public materializedPath: string;
 
     constructor({ materializedPath }: IAccountPayload) {
         this.materializedPath = materializedPath;
         this.accountName = getAccountName(materializedPath);
-    }
-
-    public toBeanCountString(): string {
-        return this.materializedPath;
     }
 }
