@@ -8,7 +8,7 @@ const initializedAccounts: { [key: string]: Account } = {};
 
 // TODO: Implement this better and upload to whatever DB we're using
 // This is not necessary for this project since this will only read and output transactions
-export function createAccount(accountPayload: IAccountPayload): Account | undefined{
+export function createAccount(accountPayload: IAccountPayload): Account | undefined {
     // Validate account payload
     // Most of the other functions are pretty optimistic regarding the inputs.
     // Make sure that when we use this function, only accept valid payloads

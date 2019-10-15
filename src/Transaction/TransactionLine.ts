@@ -6,6 +6,8 @@ export interface ITransactionLine {
     value: number;
 }
 
+// Hmmm now that I think about it,
+// Do is still need this class? the interface is enough isn't it?
 export class TransactionLine {
     public account: Account;
     public currency: string;

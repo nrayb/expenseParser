@@ -1,6 +1,6 @@
 export function getAccountName(materializedPath: string): string {
     const splitPath = materializedPath.split(":");
-    return splitPath[splitPath.length - 1] || "";
+    return splitPath[splitPath.length - 1] || materializedPath;
 }
 
 export function validatePath(materializedPath: string): boolean {

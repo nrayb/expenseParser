@@ -22,7 +22,6 @@ export interface ITransactionPayload {
     transactionLines: TransactionLine[];
 }
 
-// TODO: refactor it to allow for multiple target accounts
 // TODO: Think of how this model will be stored in a table
 export class Transaction {
     public date: Date;

@@ -65,7 +65,6 @@ export function mapSanitizedAccountToAccountName(account: string): string | unde
     return RBC_ACCOUNT_MAPPING[account.toUpperCase()];
 }
 
-// TODO: Implement this
 export function inferAccountPath(transactionName: string): string {
     const accountPathMap: {[key: string]: string} = {
         "7-ELEVEN": "Expenses:Home:Groceries",
