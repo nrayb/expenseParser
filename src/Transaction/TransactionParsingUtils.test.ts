@@ -134,4 +134,9 @@ test("Tets parseDate for format from RBC", () => {
     expect(date.getDate()).toBe(2);
     expect(date.getMonth()).toBe(0);
     expect(date.getFullYear()).toBe(2019);
+
+    date = parseDate("1/12/2019");
+    expect(date.getDate()).toBe(12);
+    expect(date.getMonth()).toBe(0);
+    expect(date.getFullYear()).toBe(2019);
 });
