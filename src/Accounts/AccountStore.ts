@@ -2,7 +2,7 @@ import {
     Account,
     IAccountPayload
 } from "./Account";
-import { validatePath } from "./AccountUtils";
+// import { validatePath } from "./AccountUtils";
 
 const initializedAccounts: { [key: string]: Account } = {};
 
@@ -36,8 +36,8 @@ export function getAccountsWithParent(parentAccountName: string): Account[] {
 }
 
 // Initializes the desired account and all uninitialized ancestors
-export function initializeAccount({ materializedPath }: IAccountPayload): Account | undefined {
-    if (!validatePath(materializedPath)) { return; }
+export function initializeAccount({ materializedPath }: IAccountPayload): Account {
+    // if (!validatePath(materializedPath)) { return; }
 
     if (initializedAccounts[materializedPath]) { return initializedAccounts[materializedPath]; }
 
@@ -59,5 +59,6 @@ export function initializeAllAccounts() {
     // TODO: Implement getter of where we store the accounts
     // This is super ugly having the account list as part of the code.
     const accountJson = require("./AccountPayload.json");
+    // TODO: Do validation of the accountJson here
     accountJson.forEach(initializeAccount);
 }
