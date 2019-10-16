@@ -9,7 +9,7 @@ import {
     parseDate,
 } from "./TransactionParsingUtils";
 
-test("Tets inferAccount for all known accoun", () => {
+test("Test inferAccount for all known transaction names", () => {
     // Limitation of this file, we need to initialize all the accounts
     initializeAllAccounts();
     const accountMap: { [key: string]: Account | undefined } = {
@@ -57,7 +57,12 @@ test("Tets inferAccount for all known accoun", () => {
     });
 });
 
-test("Tets inferTransactionName for known descriptions from RBC", () => {
+test("Test inferAccount for unknown transaction names", () => {
+    initializeAllAccounts();
+    expect(inferAccount("UNKNOWN TRANSACTION NAME")).toBe(getAccount("TODO"));
+});
+
+test("Test inferTransactionName for known descriptions from RBC", () => {
     const testAssetMap: {[key: string]: string} = {
         "7-ELEVEN STORE #37875 SURREY BC": "7-ELEVEN",
         "ADOBE *PRODUCTS 8008336687 CA": "ADOBE",
@@ -108,7 +113,7 @@ test("Tets inferTransactionName for known descriptions from RBC", () => {
     });
 });
 
-test("Tets parseDate for format from RBC", () => {
+test("Test parseDate for format from RBC", () => {
     // From RBC
     let date = parseDate("9/22/2019");
     expect(date.getDate()).toBe(22);

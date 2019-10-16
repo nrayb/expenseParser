@@ -1,5 +1,5 @@
 import { Account } from "../Accounts/Account";
-import { getAccount } from "../Accounts/AccountStore";
+import { getAccount, initializeAccount } from "../Accounts/AccountStore";
 import {
     inferAccountPath,
     mapSanitizedAccountToAccountName,
@@ -24,10 +24,10 @@ export function inferTransactionName(accountName: string): string {
     return mappedAccount || sanitizedAccount;
 }
 
-export function inferAccount(accountName: string): Account | undefined {
+export function inferAccount(accountName: string): Account {
     const sanitizedAccount = sanitizeAccountName(accountName);
     const accountPath = inferAccountPath(sanitizedAccount.toUpperCase());
-    return getAccount(accountPath);
+    return getAccount(accountPath) || initializeAccount({ materializedPath: "TODO" });
 }
 
 // TODO: Implement this
