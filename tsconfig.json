@@ -24,10 +24,15 @@
         "noImplicitReturns": true,
         "noUnusedLocals": true,
     },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.json",
+    ],
     "exclude": [
         "dist",
         "node_modules",
-        "**/*.spec.ts"
+        "**/*.spec.ts",
+        "**/*.test.ts",
     ],
     "filesGlob": [
         "./node_modules/@types/**/*.d.ts",

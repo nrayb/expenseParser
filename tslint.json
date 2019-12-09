@@ -5,7 +5,16 @@
     ],
     "jsRules": {},
     "rules": {
-        "no-console": false
+        "no-unused-variable": [true, {"ignore-pattern": "^_"}],
+        "no-console": false,
+        "no-var-requires": false,
+        "one-variable-per-declaration": false,
+        "trailing-comma": false,
+        "variable-name": [
+            true,
+            "check-format",
+            "allow-leading-underscore"
+        ]
     },
     "rulesDirectory": []
 }
