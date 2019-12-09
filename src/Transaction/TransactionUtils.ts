@@ -24,6 +24,8 @@ const RBC_ACCOUNT_MAPPING: { [key: string]: string } = {
     "FALAFEL KING": "FALAFEL KING",
     "FAMOUS PLAYER": "CINEPLEX",
     "FIDO MOBILE": "FIDO",
+    "GONG CHA": "GONG CHA",
+    "HYDRO BILL PMT": "BCHYDRO",
     "IKEA": "IKEA",
     "INDIGO": "CHAPTERS",
     "KITANOYA GUU GARDEN": "GUU GARDEN",
@@ -54,7 +56,10 @@ export function sanitizeAccountName(account: string): string {
         .split(/\s?(?<!\S)(?:AB|BC|ON|QC|CA)(?!\S)/i).join("") // Replaces all instances of Provinces
         .split(/\s?(?:BURNABY|COQUITLAM|SURREY|VANCOUVER|RICHMOND|TORONTO|VERDUN|MISSISSAUGA)/i).join("")
         .split(/\s?CA\*\S*/i).join("") // AUDIBLE
-        .replace(/\s?#?\*?\d{3,}\S*/, ""); // Usually represents store/transaction numbers
+        .replace(/\s?#?\*?\d{3,}\S*/, "") // Usually represents store/transaction numbers
+        .replace("Contactless Interac purchase - ", "") // RBC strings
+        .replace("Online Banking Interac purchase - ", ""); // RBC strings
+        // TODO: We need to trim spaces in the end
 }
 
 // I don't like this function as is.
@@ -77,6 +82,7 @@ export function inferAccountPath(transactionName: string): string {
         "BISTRO SAKANA": "Expenses:Food:Lunch",
         "BUBBLE WAFFLE": "Expenses:Food:Lunch",
         "CANADIAN TIRE": "Expenses:Home:Groceries",
+        "CHAPTERS": "Expenses:Personal:Material",
         "CHATIME": "Expenses:Food:Snacks",
         "CINEPLEX": "Expenses:Personal:Fun",
         "COSTCO": "Expenses:Home:Groceries",
@@ -94,6 +100,7 @@ export function inferAccountPath(transactionName: string): string {
         "OPA": "Expenses:Food:Dinner",
         "PETROCAN": "Expenses:Car:Gas",
         "RBC MASTERCARD": "Assets:CA:RBC:Chequing",
+        "SFU": "Expenses:Personal:Necessary",
         "STARBUCKS": "Expenses:Food:Coffee",
         "T&T": "Expenses:Home:Groceries",
         "TACO TIME": "Expenses:Food:Lunch",
