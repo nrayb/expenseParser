@@ -38,6 +38,8 @@ export class Transaction {
         this.date = date;
         this.name = name;
         this.description = description;
+
+        // TODO: create computed property that calculated if a transaction is balanced
         this.transactionLines = transactionLines;
     }
 }
